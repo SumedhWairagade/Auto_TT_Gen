@@ -1,0 +1,367 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package timetable.teacherFrames;
+
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import timetable.JConnection;
+import timetable.adminFrame.TeachingPref;
+
+/**
+ *
+ * @author Pritam Bera
+ */
+public class teachingPref extends javax.swing.JFrame {
+    
+    Connection conn = null;
+    String teacherName,name1;
+    String subject_choice_1,subject_choice_2,subject_choice_3;
+    String no_of_times_1,no_of_times_2,no_of_times_3;
+    int college_id,dept_id;
+
+    /**
+     * Creates new form teachingPref
+     */
+    
+   /* private void selectTeacher(){
+         try{
+            
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+            pst = conn.prepareStatement("select name,college_id,dept_id from teachers where username=?");
+            pst.setString(1, teacherName);
+            rs = pst.executeQuery();
+            
+            while(rs.next())
+            {
+         
+                college_id=rs.getInt("college_id");
+                dept_id=rs.getInt("dept_id");
+                name=rs.getString("name");
+        
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+    }*/
+    private void selectPreferences(){
+        try{
+            
+            PreparedStatement pst = null;
+            pst = conn.prepareStatement("select name,college_id,dept_id from teachers where username=?");
+            pst.setString(1,teacherName);
+            ResultSet rs = pst.executeQuery();
+           
+            System.out.println("hellolloloololololo");
+            if(rs.next())
+            {
+                 name1=rs.getString("name");
+                 college_id=rs.getInt("college_id");
+                 dept_id=rs.getInt("dept_id");
+                
+                 PreparedStatement pst2 = null;
+                 System.out.println(name1+" "+college_id+" "+dept_id+" ");
+                 pst2 = conn.prepareStatement("select subject_choice_1,no_of_times_1,subject_choice_2,no_of_times_2,subject_choice_3,no_of_times_3 from teaching_preference where name= ? and college_id = ? and dept_id = ?");
+                 pst2.setString(1, name1);
+                 pst2.setInt(2, college_id);
+                 pst2.setInt(3,dept_id);
+                 ResultSet rs2 = pst2.executeQuery();
+                 if(rs2.next()){
+                     
+                        subject_choice_1=rs2.getString("subject_choice_1");
+                        System.out.println(subject_choice_1);
+                        jLabel8.setText(subject_choice_1);
+                        
+                        no_of_times_1=rs2.getString("no_of_times_1");
+                         jLabel9.setText(no_of_times_1);
+                        
+                        subject_choice_2=rs2.getString("subject_choice_2");
+                        jLabel10.setText(subject_choice_2);
+                        
+                        no_of_times_2=rs2.getString("no_of_times_2");
+                        jLabel11.setText(no_of_times_2);
+                        
+                        subject_choice_3=rs2.getString("subject_choice_3");
+                        jLabel12.setText(subject_choice_3);
+                        
+                         no_of_times_3=rs2.getString("no_of_times_3");
+                         jLabel13.setText(no_of_times_3);
+
+                   
+               }
+            conn.close();
+            }  
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+           
+    }
+    public teachingPref() {
+        //1:set parameterized constructor with username
+        //2:To retireve name,collegeid,deptid of teacher from teachers table
+        //3:teaching pref ki entry
+        initComponents();
+        conn = JConnection.ConnecrDb();
+        setIconImage();
+        
+    }
+    
+    public teachingPref(String name){
+        initComponents();
+        conn = JConnection.ConnecrDb();
+        setIconImage();
+        teacherName=name;
+        selectPreferences();
+    }
+ 
+    
+
+    private void setIconImage(){
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
+    }
+    
+    public void setColor(JPanel p) {
+        p.setBackground(new Color(36,47,65));
+        p.setBorder(BorderFactory.createLineBorder(new Color(97,212,195), 2));
+  
+    }
+    
+    public void resetColor(JPanel p1) {
+        p1.setBackground(new Color(97,212,195));   
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("AppName");
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(36, 47, 65));
+        jPanel1.setMaximumSize(new java.awt.Dimension(439, 551));
+        jPanel1.setMinimumSize(new java.awt.Dimension(439, 551));
+        jPanel1.setPreferredSize(new java.awt.Dimension(439, 551));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("SUBMITTED TEACHING PREFERENCES");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, -1, 40));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 60));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Corbel", 1, 18)); // NOI18N
+        jLabel1.setText("SUBJECT CHOICE 1                                  :");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 320, 35));
+
+        jLabel2.setFont(new java.awt.Font("Corbel", 1, 18)); // NOI18N
+        jLabel2.setText("NO OF TIMES SUBJECT 1  TAUGHT  :");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 320, 41));
+
+        jLabel4.setFont(new java.awt.Font("Corbel", 1, 18)); // NOI18N
+        jLabel4.setText("SUBECT CHOICE 2                                   :");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 320, 33));
+
+        jLabel5.setFont(new java.awt.Font("Corbel", 1, 18)); // NOI18N
+        jLabel5.setText("NO OF TIMES SUBJECT 2 TAUGHT  :");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 320, 36));
+
+        jLabel6.setFont(new java.awt.Font("Corbel", 1, 18)); // NOI18N
+        jLabel6.setText("SUBJECT CHOICE 3                                :");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 320, 32));
+
+        jLabel7.setFont(new java.awt.Font("Corbel", 1, 18)); // NOI18N
+        jLabel7.setText("NO OF TIMES SUBJECT 3 TAUGHT  :");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 320, 35));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 340, 40));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, 340, 40));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 240, 340, 40));
+
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel8.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 3, 340, 40));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 360, 40));
+
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, 360, 40));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 360, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 360, 40));
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 360, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 240, 360, 40));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel2.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 310, 360, 40));
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, 360, 40));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 840, 450));
+
+        setSize(new java.awt.Dimension(850, 542));
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(teachingPref.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(teachingPref.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(teachingPref.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(teachingPref.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new teachingPref().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    // End of variables declaration//GEN-END:variables
+}

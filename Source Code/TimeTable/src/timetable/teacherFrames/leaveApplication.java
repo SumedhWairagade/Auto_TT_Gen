@@ -1,0 +1,416 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package timetable.teacherFrames;
+
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import static javax.swing.SwingConstants.CENTER;
+import timetable.JConnection;
+
+/**
+ *
+ * @author ASUS
+ */
+public class leaveApplication extends javax.swing.JFrame {
+    String teacherName;
+    String name;
+    int college_id;
+    int dept_id;
+    Connection conn = null;
+    
+    private void setIconImage(){
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
+    }
+        
+    private int getId()
+    {
+        int id=0;
+        try{
+            
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+            pst = conn.prepareStatement("select id,name,college_id,dept_id from teachers where username=?");
+            pst.setString(1, teacherName);
+            rs = pst.executeQuery();
+            
+            while(rs.next())
+            {
+                id=rs.getInt("id");
+                college_id=rs.getInt("college_id");
+                dept_id=rs.getInt("dept_id");
+                name=rs.getString("name");
+        
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        return id;
+    }
+    
+    
+    private void fillCombo()
+    {
+        try{
+            int i = getId();
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+            pst = conn.prepareStatement("select * from teachers where id!=? ");
+            pst.setInt(1,i);
+            rs = pst.executeQuery();
+            
+            while(rs.next())
+            {
+                String name=rs.getString("name");
+                combobox1.addItem(name);
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+    }
+    
+    private void leaveApplicationDatabase(){
+        try{
+            
+            PreparedStatement pst = null;
+            
+            Date start_date = jDateChooser2.getDate();
+            String str_start_date = DateFormat.getDateInstance().format(start_date);
+            
+            Date end_date = jDateChooser1.getDate();
+            String str_end_date = DateFormat.getDateInstance().format(end_date);
+            
+            String substitute_teacher = (String) combobox1.getSelectedItem();
+            System.out.println(name+" "+college_id+" "+dept_id+" "+str_start_date+" "+str_end_date+" "+substitute_teacher);
+            pst = conn.prepareStatement("insert into leave_applications (teacher_name,college_id,dept_id,start_date,end_date,substitute_teacher) values (?,?,?,?,?,?)");
+            pst.setString(1,name);
+            pst.setInt(2, college_id);
+            pst.setInt(3, dept_id);
+            pst.setString(4, str_start_date);
+            pst.setString(5, str_end_date);
+            pst.setString(6, substitute_teacher);
+            
+            pst.execute();
+            
+            conn.close();
+            JOptionPane.showMessageDialog(null, "Successfully Submitted", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+    }
+    /**
+     * Creates new form leaveApplication
+     */
+    public leaveApplication() {
+        initComponents();
+        setIconImage();
+        conn = JConnection.ConnecrDb();
+        nonactivate();
+        fillCombo();
+    }
+    
+    public leaveApplication(String name) {
+        teacherName = name;
+        initComponents();
+        setIconImage();
+        conn = JConnection.ConnecrDb();
+        nonactivate();
+        fillCombo();
+    }
+    
+    public void nonactivate()
+    {
+        jLabel9.setVisible(false);
+        jLabel6.setVisible(false);
+        jLabel8.setVisible(false);
+        jLabel10.setVisible(false);
+    }
+    
+    public void setColor(JPanel p) {
+        p.setBackground(new Color(36,47,65));
+        p.setBorder(BorderFactory.createLineBorder(new Color(97,212,195), 2));
+  
+    }
+    
+    public void resetColor(JPanel p1) {
+        p1.setBackground(new Color(97,212,195));   
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        combobox1 = new javax.swing.JComboBox<>();
+        jPanel5 = new javax.swing.JPanel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("AppName");
+        setMaximumSize(new java.awt.Dimension(400, 500));
+        setMinimumSize(new java.awt.Dimension(400, 500));
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMaximumSize(new java.awt.Dimension(400, 500));
+        jPanel1.setMinimumSize(new java.awt.Dimension(400, 500));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 500));
+
+        jPanel2.setBackground(new java.awt.Color(36, 47, 65));
+        jPanel2.setMaximumSize(new java.awt.Dimension(400, 60));
+        jPanel2.setMinimumSize(new java.awt.Dimension(400, 60));
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 60));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("LEAVE APPLICATION");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, 40));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setPreferredSize(new java.awt.Dimension(400, 440));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Corbel Light", 1, 16)); // NOI18N
+        jLabel2.setText("Select Start Date:");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Corbel Light", 1, 16)); // NOI18N
+        jLabel4.setText("Select End Date:");
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Corbel Light", 1, 16)); // NOI18N
+        jLabel5.setText("Select Substitute Teacher:");
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
+
+        jLabel6.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel6.setText("Please select valid end date");
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
+
+        jPanel4.setBackground(new java.awt.Color(97, 212, 195));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setFont(new java.awt.Font("Corbel Light", 1, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("SUBMIT REQUEST");
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel7MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel7MouseExited(evt);
+            }
+        });
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 40));
+
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 180, 40));
+
+        combobox1.setToolTipText("");
+        jPanel3.add(combobox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 300, 30));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+        );
+
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 300, 30));
+        jPanel3.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 300, 40));
+        jPanel3.add(jDateChooser2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 300, 40));
+
+        jLabel8.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel8.setText("Please select valid start date");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
+
+        jLabel9.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel9.setText("Please select start date");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
+
+        jLabel10.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel10.setText("Please select end date");
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 500));
+
+        setSize(new java.awt.Dimension(417, 494));
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        // TODO add your handling code here:
+
+        nonactivate();
+        int flag=1;
+        
+        Date today = new Date();
+        
+        Date start_date = jDateChooser2.getDate();
+        Date end_date = jDateChooser1.getDate();
+        
+        if(jDateChooser2.getDate()==null)    
+        {
+            flag=0;
+            jLabel9.setVisible(true);
+        }
+
+        if(jDateChooser1.getDate()==null)
+        {
+            flag=0;
+            jLabel10.setVisible(true);
+        }
+
+        if(flag==1)
+        {
+            int flag2=1;
+            if (start_date.compareTo(today) < 0)
+            {
+                flag2=0;
+                jLabel8.setVisible(true);
+            }
+            if(end_date.compareTo(start_date) < 0 || end_date.compareTo(today) < 0)
+            {
+                flag2=0;
+               jLabel6.setVisible(true);
+            }
+            if(flag2==1)
+            {
+                leaveApplicationDatabase();
+                this.dispose();
+            }
+        } 
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseEntered
+        // TODO add your handling code here:
+        setColor(jPanel4);
+    }//GEN-LAST:event_jLabel7MouseEntered
+
+    private void jLabel7MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseExited
+        // TODO add your handling code here:
+        resetColor(jPanel4);
+    }//GEN-LAST:event_jLabel7MouseExited
+
+    //int height = 0;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(leaveApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(leaveApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(leaveApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(leaveApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new leaveApplication().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> combobox1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    // End of variables declaration//GEN-END:variables
+}
